@@ -2,14 +2,13 @@ import torch
 import torch.nn as nn
 from geoopt.optim import RiemannianAdam
 from geoopt.tensor import ManifoldParameter
-from lib.lorentz.layers import LorentzMLR, LorentzConvGroup2d, LorentzConv2d,LorentzAvgPool2d, LorentzeLU,LorentzBatchNorm2d
+from lib.lorentz.layers import LorentzMLR,  LorentzConv2d,LorentzAvgPool2d, LorentzeLU
 from lib.lorentz.manifold import CustomLorentz
 import torch.nn.functional as F
-from spdnets.GyroBNH import GyroBNH2D
-import spdnets.batchnorm as bn
+import nets.batchnorm as bn
 
 
-class GyroNet(nn.Module):
+class HEEGNet(nn.Module):
 
     def __init__(self,
                  chunk_size: int = 151,
@@ -29,7 +28,7 @@ class GyroNet(nn.Module):
                  lr=0.01,
                  weight_decay=1e-3):
 
-        super(GyroNet, self).__init__()
+        super(HEEGNet, self).__init__()
         self.F1 = F1
         self.F2 = F2
         self.D = D

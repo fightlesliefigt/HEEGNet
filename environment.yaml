@@ -1,0 +1,29 @@
+name: heegnet
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+   # basic programs
+   - python==3.9.*
+   - pip
+   # scientific python base packages
+   - numpy
+   - pandas
+   - scipy
+   # jupyter notebooks
+   - ipykernel
+   - notebook
+   - jupyterlab
+   - nb_conda_kernels
+   # machine learning
+   - pytorch
+   - torchvision
+   - scikit-learn
+   - pip:
+      # m/eeg analysis
+      - moabb
+      # machine learning
+      - geoopt
+      # this package
+      - -e .

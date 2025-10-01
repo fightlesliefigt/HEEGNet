@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 from Geometry.hyperbolic import Hyperboloid
-from spdnets.GyroBNBase import GyroBNBase
+from nets.GyroBNBase import GyroBNBase
 
 class GyroBNH1D(GyroBNBase):
     """

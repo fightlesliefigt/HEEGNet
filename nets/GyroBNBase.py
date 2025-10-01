@@ -64,12 +64,12 @@ class GyroBNBase(nn.Module):
 
     def updating_running_statistics(self, batch_mean, batch_var):
         if self.running_mean is None:
-            self.running_mean = batch_mean
+            self.running_mean = batch_mean.detach()
         else:
             self.running_mean = self.manifold.geodesic(self.running_mean, batch_mean,self.momentum)
 
         if self.running_var is None:
-            self.running_var = batch_var
+            self.running_var = batch_var.detach()
         else:
             self.running_var = (1 - self.momentum) * self.running_var + self.momentum * batch_var
 

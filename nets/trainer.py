@@ -5,10 +5,10 @@ import yaml
 from .callbacks import Callback
 
 import traceback
-import spdnets.functionals as fn
+import nets.functionals as fn
 class Trainer:
 
-    def __init__(self, max_epochs, callbacks, min_epochs=None, loss=None, device=None, dtype=None, swd_weight=0, lr=None, weight_decay=None):
+    def __init__(self, max_epochs, callbacks, min_epochs=None, loss=None, device=None, dtype=None, swd_weight=0, lr=0.01, weight_decay=1e-3):
         self.swd_weight = swd_weight
         self.lr = lr
         self.weight_decay = weight_decay
