@@ -46,14 +46,6 @@ class HEEGNet(nn.Module):
         self.dtype_ = dtype
         self.lr = lr
         self.weight_decay = weight_decay
-        self.manifold_violation_counters = {
-            'after_projx': 0,
-            'after_lc1': 0,
-            'after_bn': 0,
-            'after_elu': 0,
-            'after_avpool': 0,
-            'after_flatten': 0,
-        }
         self.total_forward_calls = 0
         self.block1 = nn.Sequential(
             nn.Conv2d(1, self.F1, (1, self.kernel_1), stride=1, padding=(0, self.kernel_1 // 2), bias=False),
@@ -125,57 +117,14 @@ class HEEGNet(nn.Module):
         x = x / (x.norm(p=2, dim=-1, keepdim=True) + 1e-8)
         x = self.manifold.projx(F.pad(x, pad=(1, 0)))         
         x = self.lc1(x) 
-        x = self.check_and_project_manifold(x, 'after_lc1')
         x = self.bn(x,domains)
-        x = self.check_and_project_manifold(x, 'after_bn')
         x = self.elu(x)
-        x = self.check_and_project_manifold(x, 'after_elu')
         x = self.avpool(x)
-        x = self.check_and_project_manifold(x, 'after_avpool')
         x = self.manifold.lorentz_flatten(x)
         features = x
-        x = self.check_and_project_manifold(x, 'after_flatten')
         x = self.lmlp(x)
         return x , features
     
-    def check_and_project_manifold(self, x: torch.Tensor, layer_name: str):
-        """
-        Check if the input tensor is on the manifold and project if necessary.
-        """
-        ok, reason = self.manifold.check_point_on_manifold(x, explain=True)
-        if not ok:
-            self.manifold_violation_counters[layer_name] += 1
-            #Project back to manifold
-            # x = self.manifold.projx(x)
-            # ok, reason = self.manifold.check_point_on_manifold(x, explain=True)
-            # if not ok:
-            #     raise ValueError(f"Layer {layer_name}: Input is not on the manifold after projection.")
-        return x
-    def print_manifold_violation_stats(self):
-        """
-        Print statistics about manifold violations for each layer.
-        """
-        print("\n" + "="*60)
-        print("MANIFOLD VIOLATION STATISTICS")
-        print("="*60)
-        print(f"Total forward calls: {self.total_forward_calls}")
-        print("-"*60)
-        
-        for layer_name, violation_count in self.manifold_violation_counters.items():
-            violation_rate = violation_count / self.total_forward_calls * 100 if self.total_forward_calls > 0 else 0
-            print(f"{layer_name:20}: {violation_count:6d} violations ({violation_rate:6.2f}%)")
-        print("="*60)            
-
-
-    def check_manifold(self, x: torch.Tensor):
-        """
-        Check if the input tensor is on the manifold.
-        """
-        ok, reason = self.manifold.check_point_on_manifold(x, explain=True)
-        if not ok:
-            print(f"Is x on manifold? {ok}, reason: {reason}")
-            raise ValueError("Input is not on the manifold.")
-        return ok, reason
 
     def configure_optimizers(self, lr=None, weight_decay=None):
 

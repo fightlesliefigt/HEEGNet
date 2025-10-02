@@ -74,9 +74,9 @@ class MomentumBatchNormScheduler(ConstantMomentumBatchNormScheduler):
 
 class EarlyStopping(Callback):
 
-    def __init__(self, metric='val_loss', higher_is_better=False, patience=15, verbose=False): #metric: 要监视的性能指标，默认为'val_loss'
-                                                             #verbose: 一个布尔值，表示是否在触发早停时显示详细信息,patience:即连续多少个epoch性能没有提升时触发早停
-        self.tempdir = tempfile.TemporaryDirectory()     #创建了一个临时目录，用于保存模型的状态字典。
+    def __init__(self, metric='val_loss', higher_is_better=False, patience=15, verbose=False): 
+                                                             
+        self.tempdir = tempfile.TemporaryDirectory()     
         self.patience = patience
         self.metric = metric
         self.sign = -1 if higher_is_better else 1
@@ -85,15 +85,15 @@ class EarlyStopping(Callback):
         self.best_epoch = -1
         self.verbose = verbose
 
-    def on_train_epoch_end(self, trainer, net):                            #定义了一个回调方法，在每个训练epoch结束时调用。
+    def on_train_epoch_end(self, trainer, net):                            
 
         current_score = self.sign * torch.Tensor([float('Inf')])
-        for record in trainer.records[::-1]:                                             #遍历训练记录，找到当前epoch的性能指标值
+        for record in trainer.records[::-1]:                                             
             if record['epoch'] == trainer.current_epoch and self.metric in record:
                 current_score = record[self.metric]
                 break
 
-        if current_score < self.best_score:      #如果当前性能指标值优于之前的最佳值，则重置计数器，更新最佳值和最佳epoch，并保存模型状态字典。
+        if current_score < self.best_score:      
             self.counter = 0
             self.best_score = current_score
             self.best_epoch = trainer.current_epoch
@@ -101,7 +101,7 @@ class EarlyStopping(Callback):
                 print(f'ES: new best score {self.best_score} for metric {self.metric} ...')
             self._save_checkpoint(net)
         else:
-            self.counter += 1                  #计数，达到十五没变就停了
+            self.counter += 1                 
         
         if self.counter >= self.patience:
             trainer.stop_fit()
@@ -110,11 +110,11 @@ class EarlyStopping(Callback):
 
         if self.verbose:
             print(f'ES: saving model ...')
-        torch.save(net.state_dict(), os.path.join(self.tempdir.name, 'es_state_dict.pt'))  #将模型状态字典保存到临时目录中
+        torch.save(net.state_dict(), os.path.join(self.tempdir.name, 'es_state_dict.pt'))  
 
-    def on_fit_end(self, trainer, net):          #定义了一个回调方法，在整个训练过程结束时调用。
+    def on_fit_end(self, trainer, net):          
         # if early stopping was triggered
-        path = os.path.join(self.tempdir.name, 'es_state_dict.pt')          #如果早停被触发（即计数器非负）且保存的模型状态字典存在，加载最佳模型。
+        path = os.path.join(self.tempdir.name, 'es_state_dict.pt')        
         if self.counter >= 0 and os.path.exists(path):
             if self.verbose:
                 print(f'ES: loading best model ...')
