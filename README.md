@@ -2,20 +2,17 @@
 
 This repository contains code accompanying the ICLR 2026 paper *[HEEGNET: HYPERBOLIC EMBEDDINGS FOR EEG](https://openreview.net/forum?id=CNDNRjpVIL)*.
 
-
-
-
 ## File list
 
 The following files are provided in this repository:
 
-`demo.ipynb` A jupyter notebook demonstrating SPDIM can compensate the conditional and label shifts in EEG source-free unsupervised domain adaptation problem.
+`demo.ipynb` A jupyter notebook to train and evaluate the proposed model.
 
 `nets` A folder containing the HEEGNet hybrid hyperbolic deep learning framework.
 
-`Geometry`, `hsssw`, `lib`  three folders contain hyperbolic space operations.
+`Geometry`, `hsssw`, `lib`  three folders contain hyperbolic space operations. 'Geometry' defines hyperbolic neural networks, 'hsssw' defines optimal transport on the hyperbolic manifold, and `lib` defines the Lorentz batch normalization operation.
 
-`pretrained_models` A folder containing the pretrained model for the source domains, enabling immediate source-free unsupervised domain adaptation.
+`pretrained_models` A folder containing the pretrained model for the source domains of the Faced dataset, enabling immediate source-free unsupervised domain adaptation to validate reported results.
 
 
 ## Requirements
