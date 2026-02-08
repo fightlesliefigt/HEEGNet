@@ -28,6 +28,7 @@ Open a jupyter notebook and run it.
 
 
 ## Apply HEEGNet to other datasets
+
 ### Domain-Specific Normalization
 In this project, we define a **domain** as a **subject–session pair**, i.e., each recording session of each subject is treated as an independent domain.
 
@@ -51,6 +52,59 @@ This protocol corresponds to a **cross-subject generalization setting**, while s
 ### Design Rationale
 Although one could alternatively define each subject as a domain, we note that using **session-wise domains** leads to better performance.  
 This is because session-wise domain modeling explicitly addresses **cross-session non-stationarity**, which is also a source of distribution shift in EEG data.
+
+### Example of the usage
+```
+network and training configuration
+cfg = dict(
+    epochs = 100,
+    batch_size_train = 50,
+    domains_per_batch = 5,
+    validation_size = 0.2,
+    evaluation = 'inter-subject', # or 'inter-subject'
+    dtype = torch.float64,
+    training=True, 
+    lr=0.001,
+    input_align= True,
+    weight_decay=1e-4,
+    swd_weight=0.01,
+    mdl_kwargs = dict( 
+    bnorm_dispersion=bn.BatchNormDispersion.SCALAR,
+    domain_adaptation=True
+)
+)
+
+# add datadependen model kwargs
+mdl_kwargs = deepcopy(cfg['mdl_kwargs'])
+mdl_kwargs['num_classes'] = n_classes
+mdl_kwargs['num_electrodes'] = X.shape[1]
+mdl_kwargs['chunk_size'] = X.shape[2]
+mdl_kwargs['domains'] = domain.unique()
+
+# create the model and training configuration
+model = HEEGNet(device=device,dtype=cfg['dtype'],**mdl_kwargs).to(device=device, dtype=cfg['dtype'])
+es = EarlyStopping(metric='val_loss', higher_is_better=False, patience=20, verbose=False)
+bn_sched = MomentumBatchNormScheduler(
+    epochs=cfg['epochs']-10,
+    bs0=cfg['batch_size_train'],
+    bs=cfg['batch_size_train']/cfg['domains_per_batch'], 
+    tau0=0.85
+)
+
+# create the trainer
+trainer = Trainer(
+    max_epochs= cfg['epochs'],
+    min_epochs= 70,
+    callbacks=[es,bn_sched],
+    loss=torch.nn.CrossEntropyLoss(),
+    device=device, 
+    dtype=torch.float64,
+    swd_weight=cfg['swd_weight'],
+    lr=cfg['lr'],
+)
+
+```
+
 
 
 ## Emotion recognition Experiment
