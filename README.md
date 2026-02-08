@@ -71,13 +71,14 @@ Processed_data/
 
 
 ## Cite
+```
 @inproceedings{li2026heegnet,
   title={HEEGNet: Hyperbolic Embeddings for EEG},
   author={Li, Shanglin and Chu, Shiwen and Ko{\c{c}}, Okan and Ding, Yi and Zhao, Qibin and Kawanabe, Motoaki and Chen, Ziheng},
   booktitle={The Fourteenth International Conference on Learning Representations},
   year={2026}
 }
-
+```
 
 
 
