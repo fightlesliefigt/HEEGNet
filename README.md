@@ -40,7 +40,7 @@ Formally, each EEG sample is associated with:
 During training, **Domain-Specific Batch Normalization (DSBN / DSMDBN)** maintains separate running statistics (mean and variance) for each `domain_id`.  
 This allows the model to explicitly capture distribution shifts across different recording sessions.
 
-### Cross-Validation Protocol
+### Cross-Subject Cross-Validation Protocol
 
 For evaluation, we adopt a **group-wise cross-validation strategy** where:
 - the grouping variable is `subject_id`,
@@ -49,28 +49,39 @@ For evaluation, we adopt a **group-wise cross-validation strategy** where:
 
 This protocol corresponds to a **cross-subject generalization setting**, while still allowing **session-level domain alignment** within the training data.
 
-### Design Rationale
+### Cross-Session Cross-Validation Protocol 
+
+In addition to the cross-subject setting, we also support a **cross-session generalization setting**.  
+In this case:
+- the grouping variable is `session_id`,
+- all samples from one session are used as the test domain,
+- remaining sessions are used for training.
+
+This protocol evaluates the model’s ability to generalize across different recording sessions **within the same subject**.
+
+
+### Design Rationale in cross-subject setting
 Although one could alternatively define each subject as a domain, we note that using **session-wise domains** leads to better performance.  
 This is because session-wise domain modeling explicitly addresses **cross-session non-stationarity**, which is also a source of distribution shift in EEG data.
 
 ### Example of the usage
 ```
-network and training configuration
+#network and training configuration
 cfg = dict(
     epochs = 100,
     batch_size_train = 50,
     domains_per_batch = 5,
     validation_size = 0.2,
-    evaluation = 'inter-subject', # or 'inter-subject'
+    evaluation = 'inter-subject'
     dtype = torch.float64,
     training=True, 
     lr=0.001,
-    input_align= True,
+    input_align= True, # To perform the input space alignment or not
     weight_decay=1e-4,
-    swd_weight=0.01,
+    swd_weight=0.01, # Loss weight for the stage two gaussian alignment
     mdl_kwargs = dict( 
-    bnorm_dispersion=bn.BatchNormDispersion.SCALAR,
-    domain_adaptation=True
+    bnorm_dispersion=bn.BatchNormDispersion.SCALAR, 
+    domain_adaptation=True # To perform domains-specific batch normalization on hyperbolic maniold or not
 )
 )
 
@@ -83,7 +94,11 @@ mdl_kwargs['domains'] = domain.unique()
 
 # create the model and training configuration
 model = HEEGNet(device=device,dtype=cfg['dtype'],**mdl_kwargs).to(device=device, dtype=cfg['dtype'])
+
+# early stopping
 es = EarlyStopping(metric='val_loss', higher_is_better=False, patience=20, verbose=False)
+
+#  hyperbolic maniold batch normalization scheduler
 bn_sched = MomentumBatchNormScheduler(
     epochs=cfg['epochs']-10,
     bs0=cfg['batch_size_train'],
