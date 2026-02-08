@@ -10,12 +10,13 @@ The following files are provided in this repository:
 
 `nets` A folder containing the HEEGNet hybrid hyperbolic deep learning framework.
 
-`Geometry`, `hsssw`, `lib`  three folders contain hyperbolic space operations. 'Geometry' defines hyperbolic neural networks, 'hsssw' defines optimal transport on the hyperbolic manifold, and `lib` defines the Lorentz batch normalization operation.
+`Geometry`, `hsssw`, `lib`  three folders contain hyperbolic space operations. `lib` defines hyperbolic neural networks, 'hsssw' defines optimal transport on the hyperbolic manifold, and 'Geometry' defines the Lorentz batch normalization operation.
 
 `pretrained_models` A folder containing the pretrained model for the source domains of the Faced dataset, enabling immediate source-free unsupervised domain adaptation to validate reported results.
 
+More detail instructions  are described in the `demo.ipynb` notebook.
 
-## Requirements
+## Prepare the python virtual environment
 
 All dependencies are managed with the `conda` package manager.
 Please follow the user guide to [install](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) `conda`.
@@ -36,7 +37,17 @@ Processed_data/
 └── ...
 
 
-More detail instructions  are described in the `demo.ipynb` notebook.
+## CBCR License
+| Permissions | Limitations | Conditions |
+| :---         |     :---:      |          :---: |
+| :white_check_mark: Modification   | :x: Commercial use   | :warning: License and copyright notice   |
+| :white_check_mark: Distribution     |       |      |
+| :white_check_mark: Private use     |        |      |
+
+## Cite
+Please cite our paper if you use our code in your own work:
+
+
 
 
 
