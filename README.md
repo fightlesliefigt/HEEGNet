@@ -49,7 +49,7 @@ For evaluation, we adopt a **group-wise cross-validation strategy** where:
 This protocol corresponds to a **cross-subject generalization setting**, while still allowing **session-level domain alignment** within the training data.
 
 ### Design Rationale
-Although one could alternatively define each subject as a domain, we empirically find that using **session-wise domains** leads to better performance.  
+Although one could alternatively define each subject as a domain, we note that using **session-wise domains** leads to better performance.  
 This is because session-wise domain modeling explicitly addresses **cross-session non-stationarity**, which is also a source of distribution shift in EEG data.
 
 
