@@ -1,8 +1,9 @@
 # HEEGNET: HYPERBOLIC EMBEDDINGS FOR EEG
 
-This repository contains code accompanying the ICLR 2026 paper *HEEGNET: HYPERBOLIC EMBEDDINGS FOR EEG*.
+This repository contains code accompanying the ICLR 2026 paper *[HEEGNET: HYPERBOLIC EMBEDDINGS FOR EEG](https://openreview.net/forum?id=CNDNRjpVIL)*.
 
-A more detailed description will be relased soon.
+
+
 
 ## File list
 
