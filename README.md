@@ -12,8 +12,6 @@ The following files are provided in this repository:
 
 `Geometry`, `hsssw`, `lib`  three folders contain hyperbolic space operations. `lib` defines hyperbolic neural networks, 'hsssw' defines optimal transport on the hyperbolic manifold, and 'Geometry' defines the Lorentz batch normalization operation.
 
-`pretrained_models` A folder containing the pretrained model for the source domains of the Faced dataset, enabling immediate source-free unsupervised domain adaptation to validate reported results.
-
 More detail instructions  are described in the `demo.ipynb` notebook.
 
 ## Prepare the python virtual environment
@@ -51,7 +49,7 @@ This protocol corresponds to a **cross-subject generalization setting**, while s
 
 ### Cross-Session Cross-Validation Protocol 
 
-In addition to the cross-subject setting, we also support a **cross-session generalization setting**.  
+In addition to the cross-subject setting, we also support the **cross-session generalization setting**.  
 In this case:
 - the grouping variable is `session_id`,
 - all samples from one session are used as the test domain,
@@ -76,12 +74,12 @@ cfg = dict(
     dtype = torch.float64,
     training=True, 
     lr=0.001,
-    input_align= True, # To perform the input space alignment or not
+    input_align= True, #! To perform the input space alignment or not
     weight_decay=1e-4,
-    swd_weight=0.01, # Loss weight for the stage two gaussian alignment
+    swd_weight=0.01, #! Loss weight for the stage two gaussian alignment
     mdl_kwargs = dict( 
     bnorm_dispersion=bn.BatchNormDispersion.SCALAR, 
-    domain_adaptation=True # To perform domains-specific batch normalization on hyperbolic maniold or not
+    domain_adaptation=True #! To perform domains-specific batch normalization on hyperbolic maniold or not
 )
 )
 
