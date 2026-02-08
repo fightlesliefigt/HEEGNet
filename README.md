@@ -26,8 +26,34 @@ Once the setup is completed, the dependencies can be installed in a new virtual 
 Open a jupyter notebook and run it.
 
 
-## Emotion recognition Experiment
 
+## Apply HEEGNet to other datasets
+### Domain-Specific Normalization
+In this project, we define a **domain** as a **subject–session pair**, i.e., each recording session of each subject is treated as an independent domain.
+
+Formally, each EEG sample is associated with:
+- `subject_id`: the biological participant,
+- `session_id`: the recording session index of that subject,
+- `domain_id = (subject_id, session_id)`.
+
+During training, **Domain-Specific Batch Normalization (DSBN / DSMDBN)** maintains separate running statistics (mean and variance) for each `domain_id`.  
+This allows the model to explicitly capture distribution shifts across different recording sessions.
+
+### Cross-Validation Protocol
+
+For evaluation, we adopt a **group-wise cross-validation strategy** where:
+- the grouping variable is `subject_id`,
+- all sessions of the same subject are strictly assigned to either the training set or the test set,
+- no subject appears in both splits.
+
+This protocol corresponds to a **cross-subject generalization setting**, while still allowing **session-level domain alignment** within the training data.
+
+### Design Rationale
+Although one could alternatively define each subject as a domain, we empirically find that using **session-wise domains** leads to better performance.  
+This is because session-wise domain modeling explicitly addresses **cross-session non-stationarity**, which is also a source of distribution shift in EEG data.
+
+
+## Emotion recognition Experiment
 In order to use this dataset, the download folder `Processed_data` (download from this URL: [https://www.synapse.org/#!Synapse:syn50615881]) 
 is required, containing the following files:
 Processed_data/
@@ -36,7 +62,6 @@ Processed_data/
 ├── sub002.pkl
 └── ...
 
-
 ## CBCR License
 | Permissions | Limitations | Conditions |
 | :---         |     :---:      |          :---: |
@@ -44,9 +69,15 @@ Processed_data/
 | :white_check_mark: Distribution     |       |      |
 | :white_check_mark: Private use     |        |      |
 
+
 ## Cite
 Please cite our paper if you use our code in your own work:
-
+@inproceedings{li2026heegnet,
+  title={HEEGNet: Hyperbolic Embeddings for EEG},
+  author={Li, Shanglin and Chu, Shiwen and Ko{\c{c}}, Okan and Ding, Yi and Zhao, Qibin and Kawanabe, Motoaki and Chen, Ziheng},
+  booktitle={The Fourteenth International Conference on Learning Representations},
+  year={2026}
+}
 
 
 
