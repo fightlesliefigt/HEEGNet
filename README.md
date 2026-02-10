@@ -35,7 +35,7 @@ Formally, each EEG sample is associated with:
 - `session_id`: the recording session index of that subject,
 - `domain_id = (subject_id, session_id)`.
 
-During training, **Domain-Specific Batch Normalization (DSBN / DSMDBN)** maintains separate running statistics (mean and variance) for each `domain_id`.  
+During training, **Domain-Specific Batch Normalization** maintains separate running statistics (mean and variance) for each `domain_id`.  
 This allows the model to explicitly capture distribution shifts across different recording sessions.
 
 ### Cross-Subject Cross-Validation Protocol
