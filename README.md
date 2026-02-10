@@ -129,13 +129,18 @@ Processed_data/
 ├── sub002.pkl
 └── ...
 
-## CBCR License
-| Permissions | Limitations | Conditions |
-| :---         |     :---:      |          :---: |
-| :white_check_mark: Modification   | :x: Commercial use   | :warning: License and copyright notice   |
-| :white_check_mark: Distribution     |       |      |
-| :white_check_mark: Private use     |        |      |
+## License
 
+CC-BY-NC-4.0
+
+You are free to:
+- Modify
+- Distribute
+- Use privately
+
+Under the following conditions:
+- Attribution required
+- **No commercial use**
 
 ## Cite
 ```
