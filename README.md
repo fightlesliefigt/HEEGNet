@@ -6,6 +6,8 @@ This repository contains code accompanying the ICLR 2026 paper *[HEEGNET: HYPERB
 
 The following files are provided in this repository:
 
+`demo.py` A python file to train and evaluate the proposed model.
+
 `demo.ipynb` A jupyter notebook to train and evaluate the proposed model.
 
 `nets` A folder containing the HEEGNet hybrid hyperbolic deep learning framework.
