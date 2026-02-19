@@ -10,7 +10,7 @@ import nets.functionals as fn
 from copy import deepcopy
 import nets.batchnorm as bn
 import numpy as np
-
+import warnings
 # %% [markdown]
 # ## configuration for alignment
 # 
@@ -46,6 +46,9 @@ if torch.cuda.is_available():
 else:
     device = torch.device('cpu')
     print('CPU')
+
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 # %% [markdown]
 # ## Loading data
